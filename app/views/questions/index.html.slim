@@ -1,7 +1,9 @@
 table
   tbody
     - @questions.each do |q|
-      th = q.title
-      td = q.body
+      tr
+        td = q.title
+        td = q.body
+        td = link_to 'View', q, class: 'view'
 
 p= link_to 'Ask question', new_question_path

@@ -8,7 +8,6 @@ feature 'User can view questions', %q{
 
   scenario 'User can view all questions' do
     visit questions_path
-    save_and_open_page
 
     expect(page).to have_content question.title
     expect(page).to have_content question.body
