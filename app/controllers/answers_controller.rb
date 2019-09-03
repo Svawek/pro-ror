@@ -1,15 +1,10 @@
 class AnswersController < ApplicationController
   expose :question, ->{ Question.find(params[:question_id]) }
-  expose :answer
-
-  def new
-    @answer = Answer.new
-  end
+  expose :answer, ->{ question.answers.new(answer_params) }
+  expose :answers, ->{ question.answers.all }
 
   def create
-    @answer = question.answers.new(answer_params)
-    @answers = question.answers
-    if @answer.save
+    if answer.save
       redirect_to question, notice: 'Your answer successfully created'
     else
       render 'questions/show'

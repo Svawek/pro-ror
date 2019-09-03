@@ -1,6 +1,6 @@
-= render 'shared/errors', resource: @question, formats: [:html]
+= render 'shared/errors', resource: question, formats: [:html]
 
-= form_with model: @question, local: true do |f|
+= form_with model: question, local: true do |f|
   = f.label :title
   = f.text_field :title
   = f.label :body
