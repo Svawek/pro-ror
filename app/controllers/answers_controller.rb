@@ -3,15 +3,16 @@ class AnswersController < ApplicationController
   expose :answer
 
   def new
-    @answer = question.answers.new(answer_params)
+    @answer = Answer.new
   end
 
   def create
     @answer = question.answers.new(answer_params)
+    @answers = question.answers
     if @answer.save
       redirect_to question, notice: 'Your answer successfully created'
     else
-      render :new
+      render 'questions/show'
     end
   end
 

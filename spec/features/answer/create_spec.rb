@@ -17,5 +17,12 @@ feature 'User can answer the question', %q{
     expect(page).to have_content 'test_answer test_answer'
   end
 
-  scenario 'User answer the question with error'
+  scenario 'User answer the question with error' do
+    visit questions_path
+    find('table tr:first-child a.view').click
+
+    click_on 'Answer'
+
+    expect(page).to have_content "Body can't be blank"
+  end
 end
