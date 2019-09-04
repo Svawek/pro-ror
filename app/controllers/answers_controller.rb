@@ -5,6 +5,7 @@ class AnswersController < ApplicationController
 
   def create
     if answer.save
+      @a_for_rspec = answer
       redirect_to question, notice: 'Your answer successfully created'
     else
       render 'questions/show'
