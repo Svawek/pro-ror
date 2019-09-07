@@ -6,8 +6,10 @@ feature 'User can view answers', %q{
   On question page
 } do
   given!(:question) { create(:question) }
+  given(:user) { create(:user) }
+  background do
+    sign_in(user)
 
-  scenario 'User can view all answers' do
     visit questions_path
     find('table tr:first-child a.view').click
 
@@ -16,6 +18,13 @@ feature 'User can view answers', %q{
 
     fill_in 'Body', with: 'test_answer2 test_answer2'
     click_on 'Answer'
+
+    click_on 'Sign out'
+  end
+
+  scenario 'User can view all answers' do
+    visit questions_path
+    find('table tr:first-child a.view').click
 
     expect(page).to have_content 'test_answer test_answer'
     expect(page).to have_content 'test_answer2 test_answer2'
