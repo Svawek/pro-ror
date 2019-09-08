@@ -1,8 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe QuestionsController, type: :controller do
-  let(:question) { create(:question) }
   let(:user) { create(:user) }
+  let(:question) { create(:question) }
 
   describe 'GET #index' do
     it 'render index view' do
@@ -53,6 +53,29 @@ RSpec.describe QuestionsController, type: :controller do
         post :create, params: { question: attributes_for(:question, :invalid) }
         expect(response).to render_template :new
       end
+    end
+  end
+
+  describe 'DELETE #destroy' do
+    let!(:question) { create(:question, user_id: user.id) }
+    before do
+      login(user)
+    end
+    
+    it 'deletes the question by author' do
+      expect { delete :destroy, params: { id: question } }.to change(Question, :count).by(-1)
+    end
+
+    it 'deletes the question by nonauthor' do
+      sign_out(user)
+      user2 = FactoryBot.create(:user)
+      sign_in(user2)
+      expect { delete :destroy, params: { id: question } }.to change(Question, :count).by(0)
+    end
+
+    it 'redirect to index' do
+      delete :destroy, params: { id: question }
+      expect(response).to redirect_to questions_path
     end
   end
 end

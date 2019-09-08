@@ -3,7 +3,7 @@ class AnswersController < ApplicationController
   
   expose :question, ->{ Question.find(params[:question_id]) }
   expose :answer, ->{ question.answers.new(answer_params) }
-  expose :answers, ->{ question.answers.all }
+  expose :answers, from: :question
 
   def create
     if answer.save
