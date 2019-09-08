@@ -9,6 +9,7 @@ p Answers:
 ul
   - answers.each do |answer|
     li = answer.body
+    p= link_to 'Delete Answer', question_answer_path(answer), method: :delete
 
 = form_with model: [question, answer], local: true do |f|
   = f.label :body

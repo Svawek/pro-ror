@@ -1,8 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe AnswersController, type: :controller do
-  let(:question) { create(:question) }
   let(:user) { create(:user) }
+  let(:question) { create(:question, user_id: user.id) }
   before { login(user) }
   
   describe 'GET #new' do
@@ -39,6 +39,28 @@ RSpec.describe AnswersController, type: :controller do
         post :create, params: { question_id: question, answer: attributes_for(:answer, :invalid) }
         expect(response).to render_template 'questions/show'
       end
+    end
+  end
+
+  describe 'DELETE #destroy' do
+    let!(:question) { create(:question, user_id: user.id) }
+    let!(:answer) { create(:answer, question_id: question.id) }
+    before { login(user) }
+    
+    it 'deletes the answer by author' do
+      expect { delete :destroy, params: { question_id: question, id: answer } }.to change(Answer, :count).by(-1)
+    end
+
+    it 'deletes the answer by nonauthor' do
+      sign_out(user)
+      user2 = FactoryBot.create(:user)
+      sign_in(user2)
+      expect { delete :destroy, params: { question_id: question, id: answer } }.to change(Answer, :count).by(0)
+    end
+
+    it 'redirect to index' do
+      delete :destroy, params: { question_id: question, id: answer }
+      expect(response).to redirect_to questions_path
     end
   end
 end
