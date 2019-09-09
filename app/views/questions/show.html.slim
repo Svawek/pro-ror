@@ -6,10 +6,11 @@ p= link_to 'Delete', question, method: :delete
 
 p Answers:
 
-ul
-  - answers.each do |answer|
-    li = answer.body
-    p= link_to 'Delete Answer', question_answer_path(answer), method: :delete
+- if answers.present?
+  - answers.each do |a|
+    - unless a.created_at.nil?
+      p= a.body
+      p= link_to 'Delete Answer', question_answer_path(a.question, a), method: :delete
 
 = form_with model: [question, answer], local: true do |f|
   = f.label :body

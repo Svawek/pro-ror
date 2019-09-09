@@ -16,7 +16,6 @@ class AnswersController < ApplicationController
   end
 
   def destroy
-    byebug
     if current_user.id == answer.user_id
       answer.destroy
       redirect_to questions_path, notice: 'Answer delete'

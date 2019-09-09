@@ -3,7 +3,7 @@ class QuestionsController < ApplicationController
 
   expose :questions, ->{ Question.all }
   expose :question
-  expose :answer, ->{ question.answers.new }
+  expose :answer, ->{ answers.new }
   expose :answers, ->{ question.answers }
 
   def create
@@ -14,6 +14,11 @@ class QuestionsController < ApplicationController
     else
       render :new
     end
+  end
+
+  def show
+    #@answers = question.answers
+    #@answer = @answers.new
   end
 
   def destroy
