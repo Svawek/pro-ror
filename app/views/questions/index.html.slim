@@ -1,9 +1,5 @@
 table
   tbody
-    - questions.each do |q|
-      tr
-        td = q.title
-        td = q.body
-        td = link_to 'View', q, class: 'view'
-
+    = render questions
+    
 p= link_to 'Ask question', new_question_path
