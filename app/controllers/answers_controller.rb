@@ -6,7 +6,7 @@ class AnswersController < ApplicationController
   expose :answers, ->{ question.answers }
 
   def create
-    answer.user_id = current_user.id
+    answer.user = current_user
     if answer.save
       @a_for_rspec = answer
       redirect_to question, notice: 'Your answer successfully created'
@@ -16,12 +16,13 @@ class AnswersController < ApplicationController
   end
 
   def destroy
-    if current_user.id == answer.user_id
-      answer.destroy
-      redirect_to questions_path, notice: 'Answer delete'
-    else
+    unless current_user == answer.user
       redirect_to questions_path, alert: "It is forbidden to delete someone else's answer"
+      return
     end
+
+    answer.destroy
+    redirect_to questions_path, notice: 'Answer delete'
   end
 
   private

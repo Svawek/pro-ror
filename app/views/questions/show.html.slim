@@ -7,10 +7,10 @@ p= link_to 'Delete', question, method: :delete
 p Answers:
 
 - if answers.present?
-  - answers.each do |a|
-    - unless a.created_at.nil?
-      p= a.body
-      p= link_to 'Delete Answer', question_answer_path(a.question, a), method: :delete
+  - answers.each do |answer|
+    - unless answer.persisted?
+      p= answer.body
+      p= link_to 'Delete Answer', question_answer_path(answer.question, answer), method: :delete
 
 = form_with model: [question, answer], local: true do |f|
   = f.label :body
