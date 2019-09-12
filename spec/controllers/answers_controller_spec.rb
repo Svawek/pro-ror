@@ -15,7 +15,7 @@ RSpec.describe AnswersController, type: :controller do
   end
 
   describe 'POST #create' do
-    context 'for authenticated use' do
+    context 'for authenticated user' do
       before { login(user) }
 
       context 'with valid attributes' do

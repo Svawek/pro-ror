@@ -12,7 +12,7 @@ feature 'User can answer the question', %q{
       sign_in(user)
 
       visit questions_path
-      find('table tr:first-child a.view').click
+      find('a.view:first-child').click
     end
 
     scenario 'answer the question' do
@@ -32,11 +32,8 @@ feature 'User can answer the question', %q{
 
   scenario 'Unauthentocated user tries to answer the question' do
     visit questions_path
-    find('table tr:first-child a.view').click
+    find('a.view:first-child').click
 
-    fill_in 'Body', with: 'test_answer test_answer'
-    click_on 'Answer'
-
-    expect(page).to have_content 'You need to sign in or sign up before continuing.'
+    expect(page).to have_no_button 'Answer'
   end
 end

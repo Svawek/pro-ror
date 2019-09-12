@@ -8,7 +8,6 @@ class AnswersController < ApplicationController
   def create
     answer.user = current_user
     if answer.save
-      @a_for_rspec = answer
       redirect_to question, notice: 'Your answer successfully created'
     else
       render 'questions/show'

@@ -7,29 +7,20 @@ feature 'Author can delete his question', %q{
 } do
   given(:user) { create(:user) }
   given(:user2) { create(:user) }
-
-  background do 
-    sign_in(user) 
-    visit questions_path
-
-    click_on 'Ask question'
-
-    fill_in 'Title', with: 'Test question'
-    fill_in 'Body', with: 'test test'
-    click_on 'Ask'
-  end
+  given!(:question) { create(:question, user: user) }
 
   scenario 'Authenticated user delete his own question' do
+    sign_in(user)
+    find('a.view:first-child').click
+
     click_on 'Delete'
 
-    expect(page).to have_content 'Question delete'
+    expect(page).to have_no_text question.body
   end
 
   scenario 'Authenticated user delete not his question' do
-    click_on 'Sign out'
-
     sign_in(user2)
-    find('table tr:first-child a.view').click
+    find('a.view:first-child').click
 
     click_on 'Delete'
 
@@ -37,12 +28,9 @@ feature 'Author can delete his question', %q{
   end
 
   scenario 'Nonauthenticated user tries to delete the question' do
-    click_on 'Sign out'
+    visit questions_path
+    find('a.view:first-child').click
 
-    find('table tr:first-child a.view').click
-
-    click_on 'Delete'
-
-    expect(page).to have_content 'You need to sign in or sign up before continuing'
+    expect(page).to have_no_button 'Delete Answer'
   end
 end

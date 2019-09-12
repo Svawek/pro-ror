@@ -5,28 +5,14 @@ feature 'User can view answers', %q{
   I want to see all answer
   On question page
 } do
-  given!(:question) { create(:question) }
   given(:user) { create(:user) }
-  background do
-    sign_in(user)
-
-    visit questions_path
-    find('table tr:first-child a.view').click
-
-    fill_in 'Body', with: 'test_answer test_answer'
-    click_on 'Answer'
-
-    fill_in 'Body', with: 'test_answer2 test_answer2'
-    click_on 'Answer'
-
-    click_on 'Sign out'
-  end
-
+  given(:question) { create(:question, user: user) }
+  given!(:answer) { create(:answer, question: question, user: user) }
+  
   scenario 'User can view all answers' do
     visit questions_path
-    find('table tr:first-child a.view').click
+    find('a.view:first-child').click
 
-    expect(page).to have_content 'test_answer test_answer'
-    expect(page).to have_content 'test_answer2 test_answer2'
+    expect(page).to have_content answer.body
   end
 end

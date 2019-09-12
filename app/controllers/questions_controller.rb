@@ -9,7 +9,6 @@ class QuestionsController < ApplicationController
   def create
     question.user = current_user
     if question.save
-      @q_for_rspec = question
       redirect_to question, notice: 'Your question successfully created'
     else
       render :new
