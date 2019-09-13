@@ -6,4 +6,8 @@ class User < ApplicationRecord
   
   has_many :questions
   has_many :answers
+
+  def owner?(object)
+    self == object.user
+  end
 end
