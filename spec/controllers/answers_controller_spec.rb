@@ -24,8 +24,10 @@ RSpec.describe AnswersController, type: :controller do
         end
   
         it 'answer belong to question' do
+          question2 = FactoryBot.create(:question)
+          FactoryBot.create(:answer, question: question2)
           post :create, params: { question_id: question, answer: attributes_for(:answer) }
-          expect(Answer.last.question).to eq question
+          expect(Answer.order(created_at: :desc).first.question).to eq question
         end
   
         it 'redirects to show view' do

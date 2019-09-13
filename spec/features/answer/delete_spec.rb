@@ -13,6 +13,8 @@ feature 'Author can delete his answer', %q{
   scenario 'Authenticated user delete his own answer' do
     sign_in(user)
     find('a.view:first-child').click
+
+    expect(page).to have_text answer.body
     click_on 'Delete Answer'
 
     expect(page).to have_no_text answer.body
@@ -22,9 +24,7 @@ feature 'Author can delete his answer', %q{
     sign_in(user2)
     find('a.view:first-child').click
 
-    click_on 'Delete Answer'
-
-    expect(page).to have_content "It is forbidden to delete someone else's answer"
+    expect(page).to have_no_button 'Delete Answer'
   end
 
   scenario 'Nonauthenticated user tries to delete the answer' do

@@ -13,6 +13,7 @@ feature 'Author can delete his question', %q{
     sign_in(user)
     find('a.view:first-child').click
 
+    expect(page).to have_text question.body
     click_on 'Delete'
 
     expect(page).to have_no_text question.body
@@ -22,9 +23,7 @@ feature 'Author can delete his question', %q{
     sign_in(user2)
     find('a.view:first-child').click
 
-    click_on 'Delete'
-
-    expect(page).to have_content "It is forbidden to delete someone else's question"
+    expect(page).to have_no_button 'Delete Answer'
   end
 
   scenario 'Nonauthenticated user tries to delete the question' do

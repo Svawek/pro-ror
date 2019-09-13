@@ -2,13 +2,12 @@
 
 h1= question.title
 p= question.body
-- if current_user
+- if current_user || current_user != question.user
   p= link_to 'Delete', question, method: :delete
 
 p Answers:
 
-- if answers.present?
-  = render answers
+= render answers
   
 - if current_user
   = form_with model: [question, answer], local: true do |f|
