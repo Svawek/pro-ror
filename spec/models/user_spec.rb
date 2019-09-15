@@ -13,11 +13,11 @@ RSpec.describe User, type: :model do
     let(:current_user) { nil }
 
     it 'author' do
-      expect(question.user.owner?(question)).to be_truthy
+      expect(question.user).to be_owner(question)
     end
 
     it 'nonauthor' do
-      expect(answer.user.owner?(question)).to be_falsy
+      expect(answer.user).not_to be_owner(question)
     end
 
     it 'nonauthenticated user' do

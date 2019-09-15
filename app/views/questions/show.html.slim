@@ -2,7 +2,7 @@
 
 h1= question.title
 p= question.body
-- if current_user || current_user != question.user
+- if current_user&.owner?(question)
   p= link_to 'Delete', question, method: :delete
 
 p Answers:
