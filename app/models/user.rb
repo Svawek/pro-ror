@@ -8,6 +8,6 @@ class User < ApplicationRecord
   has_many :answers
 
   def owner?(object)
-    self == object.user
+    self.id == object.user_id
   end
 end

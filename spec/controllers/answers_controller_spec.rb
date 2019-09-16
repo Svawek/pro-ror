@@ -25,7 +25,8 @@ RSpec.describe AnswersController, type: :controller do
   
         it 'answer belong to question' do
           post :create, params: { question_id: question, answer: attributes_for(:answer) }
-          expect(Answer.order(created_at: :desc).first.question).to eq question
+          created_answer = Answer.order(created_at: :desc).first
+          expect(created_answer.question).to eq question
         end
   
         it 'redirects to show view' do

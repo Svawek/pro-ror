@@ -15,7 +15,7 @@ class AnswersController < ApplicationController
   end
 
   def destroy
-    unless current_user == answer.user
+    unless current_user.owner?(answer)
       redirect_to questions_path, alert: "It is forbidden to delete someone else's answer"
       return
     end
