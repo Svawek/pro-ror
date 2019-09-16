@@ -1,14 +1,28 @@
 class QuestionsController < ApplicationController
+  before_action :authenticate_user!, except: %i[index show]
+
   expose :questions, ->{ Question.all }
   expose :question
+  expose :answer, ->{ answers.new }
+  expose :answers, ->{ question.answers }
 
   def create
-    @question = Question.new(question_params)
-    if @question.save
-      redirect_to @question
+    question.user = current_user
+    if question.save
+      redirect_to question, notice: 'Your question successfully created'
     else
       render :new
     end
+  end
+
+  def destroy
+    unless current_user.owner?(question)
+      redirect_to questions_path, alert: "It is forbidden to delete someone else's question"
+      return
+    end
+
+    question.destroy
+    redirect_to questions_path, notice: 'Question delete'
   end
 
   private
