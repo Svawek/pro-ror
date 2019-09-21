@@ -1,5 +1,3 @@
-= render 'shared/errors', resource: answer, formats: [:html]
-
 h1= question.title
 p= question.body
 - if current_user&.owner?(question)
@@ -8,9 +6,12 @@ p= question.body
 p Answers:
 
 = render answers
-  
+.answer-errors
+
+.answers
+
 - if current_user
-  = form_with model: [question, answer], local: true do |f|
+  = form_with model: [question, answer] do |f|
     = f.label :body
     = f.text_area :body
     = f.submit 'Answer'
