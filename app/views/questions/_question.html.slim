@@ -1,4 +1,16 @@
 tr
   td = question.title
   td = question.body
-  td = link_to 'View', question, class: 'view'
+  td
+    span= link_to 'View', question, class: 'view'
+    - if current_user&.owner?(question)
+      span= link_to 'Edit'
+- if current_user&.owner?(question)
+  tr
+    td colspan='3'
+      = form_with model: question do |f|
+        = f.label :title
+        = f.text_field :title
+        = f.label :body
+        = f.text_area :body
+        = f.submit 'Save'
