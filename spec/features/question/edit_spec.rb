@@ -10,7 +10,7 @@ feature 'Author can edit question', %q{
   given!(:question) { create(:question, user: user) }
 
   describe 'Authenticated user' do
-    scenario 'and author of question edit question' do
+    scenario 'and author of question edit question', js: true do
       sign_in user
       visit questions_path
 

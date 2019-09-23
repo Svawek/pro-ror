@@ -81,7 +81,7 @@ RSpec.describe QuestionsController, type: :controller do
       end
   
       it 'redirect to index' do
-        login(user)
+        login(user2)
         delete :destroy, params: { id: question }
         expect(response).to redirect_to questions_path
       end
@@ -95,6 +95,32 @@ RSpec.describe QuestionsController, type: :controller do
   end
 
   describe 'PATCH #update' do
+    before { login(user) }
 
+    context 'with valid attributes' do
+      it 'change answer attributes' do
+        patch :update, params: { id: question, question: { body: 'new body' } }, format: :js
+        question.reload
+        expect(question.body).to eq 'new body'
+      end
+
+      it 'renders update view' do
+        patch :update, params: { id: question, question: { title: 'new title', body: 'new body' } }, format: :js
+        expect(response).to render_template :update
+      end
+    end
+
+    context 'with invalid attributes' do
+      it 'does not change attributes' do
+        expect do
+          patch :update, params: { id: question, question: attributes_for(:question, :invalid) }, format: :js
+        end.to_not change(question, :title)
+      end
+
+      it 'render update view' do
+        patch :update, params: { id: question, question: attributes_for(:question, :invalid) }, format: :js
+        expect(response).to render_template :update
+      end
+    end
   end
 end

@@ -15,6 +15,10 @@ class QuestionsController < ApplicationController
     end
   end
 
+  def update
+    question.update(question_params)
+  end
+
   def destroy
     unless current_user.owner?(question)
       redirect_to questions_path, alert: "It is forbidden to delete someone else's question"
