@@ -7,6 +7,7 @@ feature 'Author can edit question', %q{
 } do
 
   given!(:user) { create(:user) }
+  given(:user2) { create(:user) }
   given!(:question) { create(:question, user: user) }
 
   describe 'Authenticated user' do
@@ -27,9 +28,26 @@ feature 'Author can edit question', %q{
         expect(page).to have_content 'Edited question'
       end
     end
-    scenario 'and author of question edit question with errors'
-    scenario 'and non-author of question try to edit question'
+    scenario 'and author of question edit question with errors', js: true do
+      sign_in user
+      visit questions_path
 
+      click_on 'Edit'
+
+      fill_in 'Body', with: ''
+      click_on 'Save'
+
+      within '.questions' do
+        expect(page).to have_content question.body
+      end
+    end
+
+    scenario 'and non-author of question try to edit question' do
+      sign_in user2
+      visit questions_path
+
+      expect(page).to_not have_link 'Edit'
+    end
   end
 
   scenario 'Unauthenticated user try to edit question' do
