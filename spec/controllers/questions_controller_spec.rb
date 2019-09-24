@@ -98,7 +98,7 @@ RSpec.describe QuestionsController, type: :controller do
     before { login(user) }
 
     context 'with valid attributes' do
-      it 'change answer attributes' do
+      it 'change question attributes' do
         patch :update, params: { id: question, question: { body: 'new body' } }, format: :js
         question.reload
         expect(question.body).to eq 'new body'

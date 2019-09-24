@@ -17,13 +17,12 @@ feature 'Author can edit answer', %q{
       visit question_path(question)
 
       click_on 'Edit'
-      save_and_open_page
-      fill_in 'Edit Answer', with: 'Edited answer'
-      click_on 'Save'
-
       within '.answers' do
+        fill_in 'Your Answer', with: 'Correct answer'
+        click_on 'Save'
+
         expect(page).to_not have_content question.body
-        expect(page).to have_content 'Edited answer'
+        expect(page).to have_content 'Correct answer'
       end
     end
     scenario 'and author of answer edit answer with errors', js: true do
@@ -32,10 +31,10 @@ feature 'Author can edit answer', %q{
 
       click_on 'Edit'
 
-      fill_in 'Edit Answer', with: ''
-      click_on 'Save'
-
       within '.answers' do
+        fill_in 'Your Answer', with: ''
+        click_on 'Save'
+
         expect(page).to have_content answer.body
       end
     end

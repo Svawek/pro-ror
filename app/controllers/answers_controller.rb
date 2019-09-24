@@ -1,13 +1,17 @@
 class AnswersController < ApplicationController
   before_action :authenticate_user!
   
-  expose :question, ->{ Question.find(params[:question_id]) }
+  expose :question, id: ->{ params[:question_id] || Answer.find(params[:id]).question.id }
   expose :answer, scope: ->{ question.answers }
   expose :answers, ->{ question.answers }
 
   def create
     answer.user = current_user
     answer.save
+  end
+
+  def update
+    answer.update(answer_params)
   end
 
   def destroy
