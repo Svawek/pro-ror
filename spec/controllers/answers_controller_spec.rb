@@ -65,24 +65,24 @@ RSpec.describe AnswersController, type: :controller do
       
       it 'deletes the answer by author' do
         login(user)
-        expect { delete :destroy, params: { question_id: question, id: answer } }.to change(Answer, :count).by(-1)
+        expect { delete :destroy, params: { question_id: question, id: answer }, format: :js }.to change(Answer, :count).by(-1)
       end
 
       it 'deletes the answer by nonauthor' do
         login(user2)
-        expect { delete :destroy, params: { question_id: question, id: answer } }.to change(Answer, :count).by(0)
+        expect { delete :destroy, params: { question_id: question, id: answer }, format: :js }.to change(Answer, :count).by(0)
       end
 
-      it 'redirect to index' do
+      it 'render :destroy' do
         login(user)
-        delete :destroy, params: { question_id: question, id: answer }
-        expect(response).to redirect_to questions_path
+        delete :destroy, params: { question_id: question, id: answer }, format: :js
+        expect(response).to render_template :destroy
       end
     end
 
     context 'for nonautheticated user' do
       it 'does not delete the answer' do
-        expect { delete :destroy, params: { question_id: question, id: answer } }.to change(Answer, :count).by(0)
+        expect { delete :destroy, params: { question_id: question, id: answer }, format: :js }.to change(Answer, :count).by(0)
       end
     end
   end

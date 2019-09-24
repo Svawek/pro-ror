@@ -10,7 +10,7 @@ feature 'Author can delete his answer', %q{
   given(:question) { create(:question, user: user) }
   given!(:answer) { create(:answer, question: question, user: user) }
 
-  scenario 'Authenticated user delete his own answer' do
+  scenario 'Authenticated user delete his own answer', js: true do
     sign_in(user)
     find('a.view:first-child').click
 
