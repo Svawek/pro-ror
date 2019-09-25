@@ -18,6 +18,11 @@ class AnswersController < ApplicationController
     answer.destroy if current_user.owner?(answer)
   end
 
+  def select_best
+    answer.the_best if current_user.owner?(answer)
+    render 'questions/show'
+  end
+
   private
 
   def answer_params

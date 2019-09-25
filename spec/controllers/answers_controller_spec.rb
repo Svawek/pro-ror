@@ -98,7 +98,7 @@ RSpec.describe AnswersController, type: :controller do
         expect(answer.body).to eq 'new body'
       end
 
-      it 'renders update view' do
+      it 'render update view' do
         patch :update, params: { id: answer, answer: { body: 'new body' } }, format: :js
         expect(response).to render_template :update
       end
@@ -115,6 +115,29 @@ RSpec.describe AnswersController, type: :controller do
         patch :update, params: { id: answer, answer: attributes_for(:answer, :invalid) }, format: :js
         expect(response).to render_template :update
       end
+    end
+  end
+
+  describe 'PATCH #select_best' do
+    let!(:answer) { create(:answer, question: question, user: user) }
+    let!(:answer2) { create(:answer, question: question, user: user) }
+    before do
+      login(user)
+      patch :select_best, params: { id: answer, answer: { best: true } }
+    end
+
+    it 'change answer.best to true' do
+      best_answer = question.answers.select { |answer| answer.best == true }
+      expect(best_answer.count).to eq 1
+    end
+    it 'change another answer.best to true' do
+      patch :select_best, params: { id: answer2, answer: { best: true } }
+      expect(answer.best).to be false
+      best_answer = question.answers.select { |answer| answer.best == true }
+      expect(best_answer.count).to eq 1
+    end
+    it 're-render question/show view' do
+      expect(response).to render_template 'questions/show'
     end
   end
 end
