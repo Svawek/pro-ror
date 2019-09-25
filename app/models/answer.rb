@@ -5,7 +5,7 @@ class Answer < ApplicationRecord
   validates :body, presence: true
 
   def the_best
-    current_best = question.answers.find_by(best: true)
+    current_best = question.answers.find_by_best(true)
     ActiveRecord::Base.transaction do
       current_best&.update!(best: false)
       update!(best: true)

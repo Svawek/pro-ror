@@ -20,6 +20,8 @@ RSpec.describe Answer, type: :model do
     it 'question have best answer' do
       answer.the_best
       answer2.the_best
+
+      answer.reload
       expect(answer).not_to be_best
       expect(answer2).to be_best
     end
