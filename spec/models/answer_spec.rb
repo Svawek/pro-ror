@@ -14,14 +14,14 @@ RSpec.describe Answer, type: :model do
 
     it 'question do not have  best answers' do
       answer.the_best
-      expect(answer).to be_best(answer)
+      expect(answer).to be_best
     end
 
     it 'question have best answer' do
       answer.the_best
       answer2.the_best
-      expect(answer).not_to be_best(answer)
-      expect(answer2).to be_best(answer2)
+      expect(answer).not_to be_best
+      expect(answer2).to be_best
     end
   end
 end

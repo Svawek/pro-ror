@@ -5,14 +5,10 @@ class Answer < ApplicationRecord
   validates :body, presence: true
 
   def the_best
-    question = self.question
-    question.answers.each do |answer|
-      if answer.best
-        answer.best = false
-        return
-      end
+    current_best = question.answers.find_by(best: true)
+    ActiveRecord::Base.transaction do
+      current_best&.update!(best: false)
+      update!(best: true)
     end
-
-    self.best = true
   end
 end
