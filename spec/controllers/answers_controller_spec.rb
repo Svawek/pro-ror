@@ -120,24 +120,20 @@ RSpec.describe AnswersController, type: :controller do
 
   describe 'PATCH #select_best' do
     let!(:answer) { create(:answer, question: question, user: user) }
-    let!(:answer2) { create(:answer, question: question, user: user) }
-    before do
-      login(user)
-      patch :select_best, params: { id: answer, answer: { best: true } }
-    end
+    before { login(user) }
 
     it 'change answer.best to true' do
-      best_answer = question.answers.select { |answer| answer.best == true }
-      expect(best_answer.count).to eq 1
+      patch :select_best, params: { id: answer, answer: { best: true } }
+      expect(question.answers.where(best: true).count).to eq 1
     end
     it 'change another answer.best to true' do
-      patch :select_best, params: { id: answer2, answer: { best: true } }
-      expect(answer.best).to be false
-      best_answer = question.answers.select { |answer| answer.best == true }
-      expect(best_answer.count).to eq 1
+      create(:answer, :best, question: question, user: user)
+      patch :select_best, params: { id: answer, answer: { best: true } }
+      expect(question.answers.where(best: true).count).to eq 1
     end
-    it 're-render question/show view' do
-      expect(response).to render_template 'questions/show'
+    it 'redirect to question view' do
+      patch :select_best, params: { id: answer, answer: { best: true } }
+      expect(response).to redirect_to question_path(question)
     end
   end
 end

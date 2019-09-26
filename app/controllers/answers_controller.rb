@@ -20,7 +20,7 @@ class AnswersController < ApplicationController
 
   def select_best
     answer.the_best if current_user.owner?(answer)
-    render 'questions/show'
+    redirect_to question_path(question)
   end
 
   private
