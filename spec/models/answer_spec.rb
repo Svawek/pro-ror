@@ -10,7 +10,6 @@ RSpec.describe Answer, type: :model do
     let!(:user) { create(:user) }
     let!(:question) { create(:question, user: user) }
     let!(:answer) { create(:answer, question: question, user: user) }
-    let!(:answer2) { create(:answer, question: question, user: user) }
 
     it 'question do not have  best answers' do
       answer.the_best
@@ -18,12 +17,13 @@ RSpec.describe Answer, type: :model do
     end
 
     it 'question have best answer' do
-      answer.the_best
-      answer2.the_best
+      answer2 = create(:answer, :best, question: question, user: user)
 
-      answer.reload
-      expect(answer).not_to be_best
-      expect(answer2).to be_best
+      answer.the_best
+      answer2.reload
+
+      expect(answer2).not_to be_best
+      expect(answer).to be_best
     end
   end
 end

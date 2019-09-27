@@ -1,10 +1,10 @@
 - if answer.persisted?
   div class="answer-#{answer.id} answer-best-#{answer.best}" data-answer-id='#{answer.id}'
-    - if answer.best
+    - if answer.best?
       p The author choose this answer the best:
     p= answer.body
     - if current_user&.owner?(answer)
-      - if !answer.best
+      - unless answer.best?
         p= link_to 'Best answer', select_best_answer_path(answer), method: :patch, remote: true
       p= link_to 'Edit', '#', class: 'edit-answer-link', data: { answer_id: answer.id}
       = form_with model: [answer], class: 'hidden', html: { id: "edit-answer-#{answer.id}" } do |f|
