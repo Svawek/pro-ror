@@ -2,7 +2,7 @@
   div class="answer answer-#{answer.id} answer-best-#{answer.best}" data-answer-id='#{answer.id}'
     - if answer.best?
       p The author choose this answer the best:
-    p= answer.body
+    p.body= answer.body
     - if current_user&.owner?(answer)
       - unless answer.best?
         p= link_to 'Best answer', select_best_answer_path(answer), method: :patch, remote: true

@@ -52,6 +52,6 @@ feature 'Author can choose best answer', %q{
     sign_in user
     visit question_path(question)
 
-    first('.answer').should have_selector('.answer-best-true')
+    expect(first('.answer')).to have_selector('.answer-best-true')
   end
 end

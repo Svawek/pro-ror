@@ -153,11 +153,11 @@ RSpec.describe AnswersController, type: :controller do
       before { login(user) }
 
       it 'change answer.best to true' do
-        patch :select_best, params: { id: answer, answer: { best: true } }
+        patch :select_best, params: { id: answer, answer: { best: true } }, format: :js
       end
       it 'change another answer.best to true' do
         create(:answer, :best, question: question, user: user)
-        patch :select_best, params: { id: answer, answer: { best: true } }
+        patch :select_best, params: { id: answer, answer: { best: true } }, format: :js
         expect(question.answers.where(best: true).count).to eq 1
       end
       it 'render template :select_best' do
@@ -171,12 +171,12 @@ RSpec.describe AnswersController, type: :controller do
       before { login(user2) }
 
       it 'do not change answer.best to true' do
-        patch :select_best, params: { id: answer, answer: { best: true } }
+        patch :select_best, params: { id: answer, answer: { best: true } }, format: :js
         expect(question.answers.where(best: true).count).to eq 0
       end
     end
 
-    context 'Non-author' do
+    context 'Guest' do
       it 'do not change answer.best to true' do
         patch :select_best, params: { id: answer, answer: { best: true } }
         expect(question.answers.where(best: true).count).to eq 0

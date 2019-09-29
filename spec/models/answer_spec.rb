@@ -12,14 +12,14 @@ RSpec.describe Answer, type: :model do
     let!(:answer) { create(:answer, question: question, user: user) }
 
     it 'question do not have  best answers' do
-      answer.the_best
+      answer.the_best!
       expect(answer).to be_best
     end
 
     it 'question have best answer' do
       answer2 = create(:answer, :best, question: question, user: user)
 
-      answer.the_best
+      answer.the_best!
       answer2.reload
 
       expect(answer2).not_to be_best
