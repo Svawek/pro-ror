@@ -4,6 +4,8 @@ class Answer < ApplicationRecord
 
   validates :body, presence: true
 
+  default_scope { order(best: :desc) }
+
   def the_best
     current_best = question.answers.find_by_best(true)
     ActiveRecord::Base.transaction do

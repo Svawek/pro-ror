@@ -11,7 +11,7 @@ feature 'Author can choose best answer', %q{
   given!(:answer) { create(:answer, user: user, question: question) }
 
   describe 'Authenticated user' do
-    scenario 'and author of the question choose best answer' do
+    scenario 'and author of the question choose best answer', js: true do
       sign_in user
       visit question_path(question)
 
@@ -35,5 +35,23 @@ feature 'Author can choose best answer', %q{
     visit question_path(question)
 
     expect(page).not_to have_button 'Best answer'
+  end
+
+  scenario 'Only one best answer on the page' do
+    create(:answer, :best, question: question)
+
+    sign_in user
+    visit question_path(question)
+
+    expect(page).to have_text('The author choose this answer the best:', count: 1)
+  end
+
+  scenario 'The best answer is in the top' do
+    create(:answer, :best, question: question)
+
+    sign_in user
+    visit question_path(question)
+
+    first('.answer').should have_selector('.answer-best-true')
   end
 end

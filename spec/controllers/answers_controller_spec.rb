@@ -89,13 +89,46 @@ RSpec.describe AnswersController, type: :controller do
 
   describe 'PATCH #update' do
     let!(:answer) { create(:answer, question: question, user: user) }
-    before { login(user) }
 
-    context 'with valid attributes' do
-      it 'change answer attributes' do
-        patch :update, params: { id: answer, answer: { body: 'new body' } }, format: :js
-        answer.reload
-        expect(answer.body).to eq 'new body'
+    context 'Author' do
+      before { login(user) }
+
+      context 'with valid attributes' do
+        it 'change answer attributes' do
+          patch :update, params: { id: answer, answer: { body: 'new body' } }, format: :js
+          answer.reload
+          expect(answer.body).to eq 'new body'
+        end
+
+        it 'render update view' do
+          patch :update, params: { id: answer, answer: { body: 'new body' } }, format: :js
+          expect(response).to render_template :update
+        end
+      end
+
+      context 'with invalid attributes' do
+        it 'does not change attributes' do
+          expect do
+            patch :update, params: { id: answer, answer: attributes_for(:answer, :invalid) }, format: :js
+          end.to_not change(answer, :body)
+        end
+
+        it 'render update view' do
+          patch :update, params: { id: answer, answer: attributes_for(:answer, :invalid) }, format: :js
+          expect(response).to render_template :update
+        end
+      end
+    end
+
+    context 'Non-author' do
+      let(:user2) { create(:user) }
+      before { login(user2) }
+
+      it 'does not change attributes' do
+        expect do
+          patch :update, params: { id: answer, answer: { body: 'new body' } }, format: :js
+          answer.reload
+        end.to_not change(answer, :body)
       end
 
       it 'render update view' do
@@ -104,36 +137,50 @@ RSpec.describe AnswersController, type: :controller do
       end
     end
 
-    context 'with invalid attributes' do
+    context 'Guest' do
       it 'does not change attributes' do
         expect do
-          patch :update, params: { id: answer, answer: attributes_for(:answer, :invalid) }, format: :js
+          patch :update, params: { id: answer, answer: { body: 'new body' } }, format: :js
+          answer.reload
         end.to_not change(answer, :body)
-      end
-
-      it 'render update view' do
-        patch :update, params: { id: answer, answer: attributes_for(:answer, :invalid) }, format: :js
-        expect(response).to render_template :update
       end
     end
   end
 
   describe 'PATCH #select_best' do
     let!(:answer) { create(:answer, question: question, user: user) }
-    before { login(user) }
+    context 'Author' do
+      before { login(user) }
 
-    it 'change answer.best to true' do
-      patch :select_best, params: { id: answer, answer: { best: true } }
-      expect(question.answers.where(best: true).count).to eq 1
+      it 'change answer.best to true' do
+        patch :select_best, params: { id: answer, answer: { best: true } }
+      end
+      it 'change another answer.best to true' do
+        create(:answer, :best, question: question, user: user)
+        patch :select_best, params: { id: answer, answer: { best: true } }
+        expect(question.answers.where(best: true).count).to eq 1
+      end
+      it 'render template :select_best' do
+        patch :select_best, params: { id: answer, answer: { best: true } }, format: :js
+        expect(response).to render_template :select_best
+      end
     end
-    it 'change another answer.best to true' do
-      create(:answer, :best, question: question, user: user)
-      patch :select_best, params: { id: answer, answer: { best: true } }
-      expect(question.answers.where(best: true).count).to eq 1
+
+    context 'Non-author' do
+      let(:user2) { create(:user) }
+      before { login(user2) }
+
+      it 'do not change answer.best to true' do
+        patch :select_best, params: { id: answer, answer: { best: true } }
+        expect(question.answers.where(best: true).count).to eq 0
+      end
     end
-    it 'redirect to question view' do
-      patch :select_best, params: { id: answer, answer: { best: true } }
-      expect(response).to redirect_to question_path(question)
+
+    context 'Non-author' do
+      it 'do not change answer.best to true' do
+        patch :select_best, params: { id: answer, answer: { best: true } }
+        expect(question.answers.where(best: true).count).to eq 0
+      end
     end
   end
 end

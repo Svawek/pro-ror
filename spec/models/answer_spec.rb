@@ -26,4 +26,15 @@ RSpec.describe Answer, type: :model do
       expect(answer).to be_best
     end
   end
+
+  context 'Default scope' do
+    let!(:question) { create(:question) }
+    let!(:answer1) { create(:answer, question: question) }
+    let!(:answer2) { create(:answer, question: question) }
+    let!(:answer3) { create(:answer, :best, question: question) }
+
+    it 'the best answer should be the first' do
+      expect(Answer.first).to eq answer3
+    end
+  end
 end

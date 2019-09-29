@@ -16,12 +16,12 @@ feature 'Author can edit answer', %q{
       sign_in user
       visit question_path(question)
 
-      click_on 'Edit'
+      click_on 'Edit answer'
       within '.answers' do
         fill_in 'Your Answer', with: 'Correct answer'
         click_on 'Save'
 
-        expect(page).to_not have_content question.body
+        expect(page).to_not have_content answer.body
         expect(page).to have_content 'Correct answer'
       end
     end
@@ -29,7 +29,7 @@ feature 'Author can edit answer', %q{
       sign_in user
       visit question_path(question)
 
-      click_on 'Edit'
+      click_on 'Edit answer'
 
       within '.answers' do
         fill_in 'Your Answer', with: ''
@@ -43,13 +43,13 @@ feature 'Author can edit answer', %q{
       sign_in user2
       visit question_path(question)
 
-      expect(page).to_not have_link 'Edit'
+      expect(page).to_not have_link 'Edit answer'
     end
   end
 
   scenario 'Unauthenticated user try to edit question' do
     visit question_path(question)
 
-    expect(page).to_not have_link 'Edit'
+    expect(page).to_not have_link 'Edit abswer'
   end
 end
