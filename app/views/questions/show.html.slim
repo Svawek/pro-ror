@@ -1,16 +1,17 @@
-= render 'shared/errors', resource: answer, formats: [:html]
+h1= @question.title
+p= @question.body
+- if current_user&.owner?(@question)
+  p= link_to 'Delete', @question, method: :delete
 
-h1= question.title
-p= question.body
-- if current_user&.owner?(question)
-  p= link_to 'Delete', question, method: :delete
+.answers
+  p.answer-title Answers:
+  = render @answers
 
-p Answers:
+.answer-errors
 
-= render answers
-  
+
 - if current_user
-  = form_with model: [question, answer], local: true do |f|
+  = form_with model: [@question, @answer], class: 'new-answer' do |f|
     = f.label :body
     = f.text_area :body
     = f.submit 'Answer'

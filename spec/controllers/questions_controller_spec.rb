@@ -14,7 +14,7 @@ RSpec.describe QuestionsController, type: :controller do
 
   describe 'GET #show' do
     it 'render show view' do
-      get :show, params: { id: :question }
+      get :show, params: { id: question }
 
       expect(response).to render_template :show
     end
@@ -81,7 +81,7 @@ RSpec.describe QuestionsController, type: :controller do
       end
   
       it 'redirect to index' do
-        login(user)
+        login(user2)
         delete :destroy, params: { id: question }
         expect(response).to redirect_to questions_path
       end
@@ -90,6 +90,57 @@ RSpec.describe QuestionsController, type: :controller do
     context 'for nonautheticated user' do
       it 'does not delete the question' do
         expect { delete :destroy, params: { id: question } }.to change(Question, :count).by(0)
+      end
+    end
+  end
+
+  describe 'PATCH #update' do
+    context 'Author' do
+      before { login(user) }
+
+      context 'with valid attributes' do
+        it 'change question attributes' do
+          patch :update, params: { id: question, question: { body: 'new body' } }, format: :js
+          question.reload
+          expect(question.body).to eq 'new body'
+        end
+
+        it 'renders update view' do
+          patch :update, params: { id: question, question: { title: 'new title', body: 'new body' } }, format: :js
+          expect(response).to render_template :update
+        end
+      end
+
+      context 'with invalid attributes' do
+        it 'does not change attributes' do
+          expect do
+            patch :update, params: { id: question, question: attributes_for(:question, :invalid) }, format: :js
+          end.to_not change(question, :title)
+        end
+
+        it 'render update view' do
+          patch :update, params: { id: question, question: attributes_for(:question, :invalid) }, format: :js
+          expect(response).to render_template :update
+        end
+      end
+    end
+
+    context 'Non-author' do
+      let(:user2) { create(:user) }
+      before { login(user2) }
+
+      it 'do not change question attributes' do
+        patch :update, params: { id: question, question: { body: 'new body' } }, format: :js
+        question.reload
+        expect(question.body).to_not eq 'new body'
+      end
+    end
+
+    context 'Guest' do
+      it 'do not change question attributes' do
+        patch :update, params: { id: question, question: { body: 'new body' } }, format: :js
+        question.reload
+        expect(question.body).to_not eq 'new body'
       end
     end
   end

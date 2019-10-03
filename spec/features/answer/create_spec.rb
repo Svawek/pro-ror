@@ -15,15 +15,16 @@ feature 'User can answer the question', %q{
       find('a.view:first-child').click
     end
 
-    scenario 'answer the question' do
+    scenario 'answer the question', js: true do
       fill_in 'Body', with: 'test_answer test_answer'
       click_on 'Answer'
 
-      expect(page).to have_content 'Your answer successfully created'
-      expect(page).to have_content 'test_answer test_answer'
+      within '.answers' do
+        expect(page).to have_content 'test_answer test_answer'
+      end
     end
 
-    scenario 'answer the question with error' do
+    scenario 'answer the question with error', js: true do
       click_on 'Answer'
 
       expect(page).to have_content "Body can't be blank"
