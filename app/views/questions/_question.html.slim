@@ -1,16 +1,21 @@
-tr class="question-#{question.id}"
-  td = question.title
-  td = question.body
-  td
-    span= link_to 'View', question, class: 'view'
-    - if current_user&.owner?(question)
-      span= link_to 'Edit', '#', class: 'edit-question-link', data: { question_id: question.id}
-- if current_user&.owner?(question)
-  tr
-    td colspan='3'
-      = form_with model: question, class: 'hidden', html: { id: "edit-question-#{question.id}" } do |f|
+div class="question-#{question.id}"
+  h3= question.title
+  p= question.body
+  - if question.files.attached?
+    - question.files.each do |file|
+      p= link_to file.filename.to_s, url_for(file)
+  p= link_to 'View', question, class: 'view'
+  - if current_user&.owner?(question)
+    p= link_to 'Edit', '#', class: 'edit-question-link', data: { question_id: question.id}
+  - if current_user&.owner?(question)
+    = form_with model: question, class: 'hidden', html: { id: "edit-question-#{question.id}" } do |f|
+      p
         = f.label :title
         = f.text_field :title
+      p
         = f.label :body
         = f.text_area :body
-        = f.submit 'Save'
+      p
+        = f.label :files
+        = f.file_field :files, multiple: true
+      p= f.submit 'Save'
