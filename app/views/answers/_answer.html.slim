@@ -13,3 +13,6 @@
         = f.submit 'Save'
 
       p= link_to 'Delete Answer', answer_path(answer), method: :delete, remote: true
+    - if answer.files.attached?
+      -answer.files.each do |file|
+        p= link_to file.filename.to_s, url_for(file)
