@@ -45,6 +45,20 @@ feature 'Author can edit answer', %q{
 
       expect(page).to_not have_link 'Edit answer'
     end
+
+    scenario 'and author of answer edit answer and add files', js: true do
+      sign_in user
+      visit question_path(question)
+
+      click_on 'Edit answer'
+      within '.answers' do
+        attach_file 'File', ["#{Rails.root}/spec/support/controller_helpers.rb", "#{Rails.root}/spec/support/feature_helpers.rb"]
+        click_on 'Save'
+
+        expect(page).to have_link 'controller_helpers.rb'
+        expect(page).to have_link 'feature_helpers.rb'
+      end
+    end
   end
 
   scenario 'Unauthenticated user try to edit question' do
