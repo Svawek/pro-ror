@@ -8,7 +8,7 @@ class Answer < ApplicationRecord
 
   def the_best!
     current_best = question.answers.find_by_best(true)
-    ActiveRecord::Base.transaction do
+    transaction do
       current_best&.update!(best: false)
       update!(best: true)
     end

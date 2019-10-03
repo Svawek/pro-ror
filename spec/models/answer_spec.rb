@@ -34,7 +34,7 @@ RSpec.describe Answer, type: :model do
     let!(:answer3) { create(:answer, :best, question: question) }
 
     it 'the best answer should be the first' do
-      expect(Answer.first).to eq answer3
+      expect(question.answers).to eq [answer3, answer1, answer2]
     end
   end
 end

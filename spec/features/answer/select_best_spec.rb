@@ -51,7 +51,6 @@ feature 'Author can choose best answer', %q{
 
     sign_in user
     visit question_path(question)
-    #save_and_open_page
 
     expect(first('.answers>.answer')).to have_text('The author choose this answer the best:')
   end
