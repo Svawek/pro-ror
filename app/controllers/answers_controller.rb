@@ -1,6 +1,6 @@
 class AnswersController < ApplicationController
   before_action :authenticate_user!
-  before_action :load_answer, only: %i[update destroy select_best]
+  before_action :load_answer, only: %i[update destroy select_best delete_file]
   before_action :load_answers, only: %i[update select_best]
 
   def create
@@ -20,6 +20,13 @@ class AnswersController < ApplicationController
 
   def select_best
     @answer.the_best! if current_user.owner?(@answer)
+  end
+
+  def delete_file
+    if current_user.owner?(@answer)
+      @file = @answer.files.find(params[:file_id])
+      @file.purge
+    end
   end
 
   private

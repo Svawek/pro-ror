@@ -5,7 +5,10 @@ Rails.application.routes.draw do
     delete '/delete_file/:file_id', to: 'questions#delete_file', as: :delete_file, on: :member
 
     resources :answers, shallow: true, only: %i[new create destroy update] do
-      patch :select_best, on: :member
+      member do
+        patch :select_best
+        delete '/delete_file/:file_id', to: 'answers#delete_file', as: :delete_file
+      end
     end
   end
 
