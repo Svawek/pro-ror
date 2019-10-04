@@ -1,6 +1,6 @@
 class QuestionsController < ApplicationController
   before_action :authenticate_user!, except: %i[index show]
-  before_action :load_question, only: %i[show edit update destroy]
+  before_action :load_question, only: %i[show edit update destroy delete_file]
 
   def index
     @questions = Question.all
@@ -40,6 +40,13 @@ class QuestionsController < ApplicationController
 
     @question.destroy
     redirect_to questions_path, notice: 'Question delete'
+  end
+
+  def delete_file
+    if current_user.owner?(@question)
+      @file = @question.files.find(params[:file_id])
+      @file.purge
+    end
   end
 
   private

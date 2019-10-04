@@ -3,10 +3,16 @@ div class="question-#{question.id}"
   p= question.body
   - if question.files.attached?
     - question.files.each do |file|
-      p= link_to file.filename.to_s, url_for(file)
+      p class="file-#{file.id}"
+        = link_to file.filename.to_s, url_for(file)
+        = '  '
+        - if current_user&.owner?(question)
+          = link_to 'Delete file', delete_file_question_path(question, file), method: :delete, remote: true
+
   p= link_to 'View', question, class: 'view'
   - if current_user&.owner?(question)
     p= link_to 'Edit', '#', class: 'edit-question-link', data: { question_id: question.id}
+
   - if current_user&.owner?(question)
     = form_with model: question, class: 'hidden', html: { id: "edit-question-#{question.id}" } do |f|
       p
