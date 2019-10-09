@@ -2,12 +2,7 @@ div class="question-#{question.id}"
   h3= question.title
   p= question.body
   - if question.files.attached?
-    - question.files.each do |file|
-      p class="file-#{file.id}"
-        = link_to file.filename.to_s, url_for(file)
-        = '  '
-        - if current_user&.owner?(question)
-          = link_to 'Delete file', delete_file_question_path(question, file), method: :delete, remote: true
+    = render partial: 'partials/file', collection: question.files, as: :file
 
   p= link_to 'View', question, class: 'view'
   - if current_user&.owner?(question)

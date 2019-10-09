@@ -42,13 +42,6 @@ class QuestionsController < ApplicationController
     redirect_to questions_path, notice: 'Question delete'
   end
 
-  def delete_file
-    if current_user.owner?(@question)
-      @file = @question.files.find(params[:file_id])
-      @file.purge
-    end
-  end
-
   private
 
   def question_params

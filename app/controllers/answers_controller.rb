@@ -22,13 +22,6 @@ class AnswersController < ApplicationController
     @answer.the_best! if current_user.owner?(@answer)
   end
 
-  def delete_file
-    if current_user.owner?(@answer)
-      @file = @answer.files.find(params[:file_id])
-      @file.purge
-    end
-  end
-
   private
 
   def answer_params

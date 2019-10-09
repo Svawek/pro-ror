@@ -4,12 +4,8 @@
       p The author choose this answer the best:
     p.body= answer.body
     - if answer.files.attached?
-      - answer.files.each do |file|
-        p class="file-#{file.id}"
-          = link_to file.filename.to_s, url_for(file)
-          = '  '
-          - if current_user&.owner?(answer)
-            = link_to 'Delete file', delete_file_answer_path(answer, file), method: :delete, remote: true
+      = render partial: 'partials/file', collection: answer.files, as: :file
+
     - if current_user&.owner?(answer)
       - unless answer.best?
         p= link_to 'Best answer', select_best_answer_path(answer), method: :patch, remote: true
@@ -24,6 +20,3 @@
         p= f.submit 'Save'
 
       p= link_to 'Delete Answer', answer_path(answer), method: :delete, remote: true
-    - if answer.files.attached?
-      -answer.files.each do |file|
-        p= link_to file.filename.to_s, url_for(file)

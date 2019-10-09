@@ -3,8 +3,7 @@ p= @question.body
 - if current_user&.owner?(@question)
   p= link_to 'Delete', @question, method: :delete
 - if @question.files.attached?
-  - @question.files.each do |file|
-    p= link_to file.filename.to_s, url_for(file)
+  = render partial: 'partials/file', collection: @question.files, as: :file
 
 .answers
   p.answer-title Answers:

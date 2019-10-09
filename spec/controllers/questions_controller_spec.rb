@@ -145,32 +145,5 @@ RSpec.describe QuestionsController, type: :controller do
     end
   end
 
-  describe 'DELETE #delete_file' do
-    let!(:question) { create(:question, :with_file, user: user)}
-    let(:user2) { create(:user) }
 
-    context 'for authenticated user' do
-      it 'deletes the file by author' do
-        login(user)
-        expect { delete :delete_file, params: { id: question, file_id: question.files.first }, format: :js }.to change(question.files, :count).by(-1)
-      end
-
-      it 'deletes the file by nonauthor' do
-        login(user2)
-        expect { delete :delete_file, params: { id: question, file_id: question.files.first }, format: :js }.to change(question.files, :count).by(0)
-      end
-
-      it 're-render delete_file view' do
-        login(user)
-        delete :delete_file, params: { id: question, file_id: question.files.first }, format: :js
-        expect(response).to render_template :delete_file
-      end
-    end
-
-    context 'for nonautheticated user' do
-      it 'does not delete the file' do
-        expect { delete :delete_file, params: { id: question, file_id: question.files.first }, format: :js }.to change(question.files, :count).by(0)
-      end
-    end
-  end
 end
