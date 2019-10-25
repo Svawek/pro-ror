@@ -38,7 +38,5 @@ RSpec.describe Answer, type: :model do
     end
   end
 
-  it 'nave many attached files' do
-    expect(Answer.new.files).to be_an_instance_of(ActiveStorage::Attached::Many)
-  end
+  it_behaves_like 'attached files', Answer
 end
