@@ -29,6 +29,16 @@ feature 'User can answer the question', %q{
 
       expect(page).to have_content "Body can't be blank"
     end
+
+    scenario 'answer the question with attached files', js: true do
+      fill_in 'Body', with: 'test_answer test_answer'
+
+      attach_file 'File', ["#{Rails.root}/spec/support/controller_helpers.rb", "#{Rails.root}/spec/support/feature_helpers.rb"]
+      click_on 'Answer'
+
+      expect(page).to have_link 'controller_helpers.rb'
+      expect(page).to have_link 'feature_helpers.rb'
+    end
   end
 
   scenario 'Unauthentocated user tries to answer the question' do

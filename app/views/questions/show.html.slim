@@ -2,6 +2,8 @@ h1= @question.title
 p= @question.body
 - if current_user&.owner?(@question)
   p= link_to 'Delete', @question, method: :delete
+- if @question.files.attached?
+  = render partial: 'partials/file', collection: @question.files, as: :file
 
 .answers
   p.answer-title Answers:
@@ -12,6 +14,10 @@ p= @question.body
 
 - if current_user
   = form_with model: [@question, @answer], class: 'new-answer' do |f|
-    = f.label :body
-    = f.text_area :body
-    = f.submit 'Answer'
+    p
+      = f.label :body
+      = f.text_area :body
+    p
+      = f.label :files
+      = f.file_field :files, multiple: true, direct_upload: true
+    p= f.submit 'Answer'

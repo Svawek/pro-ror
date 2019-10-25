@@ -37,4 +37,6 @@ RSpec.describe Answer, type: :model do
       expect(question.answers).to eq [answer3, answer1, answer2]
     end
   end
+
+  it_behaves_like 'attached files', Answer
 end
