@@ -14,6 +14,7 @@ class QuestionsController < ApplicationController
   def show
     @answers = @question.answers
     @answer = Answer.new
+    @answer.links.new
   end
 
   def edit

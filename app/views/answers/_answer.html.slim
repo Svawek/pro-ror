@@ -6,6 +6,12 @@
     - if answer.files.attached?
       = render partial: 'partials/file', collection: answer.files, as: :file
 
+    .links
+      p Links:
+      ul
+        - answer.links.each do |link|
+          li= link_to link.name, link.url
+
     - if current_user&.owner?(answer)
       - unless answer.best?
         p= link_to 'Best answer', select_best_answer_path(answer), method: :patch, remote: true

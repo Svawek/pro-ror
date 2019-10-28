@@ -26,4 +26,12 @@ p= @question.body
     p
       = f.label :files
       = f.file_field :files, multiple: true, direct_upload: true
+    .add-links
+      p Links:
+      p
+        = f.fields_for :links do |link|
+          = render 'link_fields', f: link
+        .new-link
+          = link_to_add_association 'add link', f, :links
     p= f.submit 'Answer'
+    

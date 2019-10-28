@@ -13,11 +13,19 @@ RSpec.describe QuestionsController, type: :controller do
   end
 
   describe 'GET #show' do
-    it 'render show view' do
-      get :show, params: { id: question }
+    before { get :show, params: { id: question } }
 
+    it 'render show view' do
       expect(response).to render_template :show
     end
+
+    it 'assigns new link for answer' do
+      expect(assigns(:answer)).to be_a_new(Answer)
+    end
+
+    it 'assigns new link for answer' do
+      expect(assigns(:answer).links.first).to be_a_new(Link)
+    end    
   end
 
   describe 'GET #new' do
