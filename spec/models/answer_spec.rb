@@ -42,4 +42,18 @@ RSpec.describe Answer, type: :model do
   end
 
   it_behaves_like 'attached files', Answer
+
+  context 'Check url' do
+    let!(:question) { create(:question) }
+    let!(:answer) { create(:answer, question: question) }
+
+    it 'valid' do
+      link = answer.linls.new
+      link.name = 'Google'
+      link.url = 'https://www.google.ru/'
+
+      expect
+    end
+
+  end
 end
