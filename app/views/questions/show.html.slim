@@ -5,6 +5,12 @@ p= @question.body
 - if @question.files.attached?
   = render partial: 'partials/file', collection: @question.files, as: :file
 
+.links
+  p Links:
+  ul
+    - @question.links.each do |link|
+      li= link_to link.name, link.url
+
 .answers
   p.answer-title Answers:
   = render @answers
