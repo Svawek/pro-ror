@@ -10,7 +10,11 @@
       p Links:
       ul
         - answer.links.each do |link|
-          li= link_to link.name, link.url
+          p
+            - if link.is_gist?
+              = render partial: 'partials/gist', object: link.url
+            - else
+              li= link_to link.name, link.url
 
     - if current_user&.owner?(answer)
       - unless answer.best?

@@ -9,7 +9,11 @@ p= @question.body
   p Links:
   ul
     - @question.links.each do |link|
-      li= link_to link.name, link.url
+      p
+        - if link.is_gist?
+          = render partial: 'partials/gist', object: link.url
+        - else
+          li= link_to link.name, link.url
 
 .answers
   p.answer-title Answers:

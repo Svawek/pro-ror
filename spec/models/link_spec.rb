@@ -38,4 +38,16 @@ RSpec.describe Link, type: :model do
       end
     end
   end
+
+  context 'check gist' do
+    it 'not a gist url' do
+      link = Link.new(name: 'test', url: 'https://google.com')
+      expect(link.is_gist?).to be_falsey
+    end
+
+    it 'a gist url' do
+      link = Link.new(name: 'test', url: 'https://gist.github.com/Svawek/1fc1816264259cfa7c4e34ca19699aef')
+      expect(link.is_gist?).to be_truthy
+    end
+  end
 end

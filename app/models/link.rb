@@ -3,4 +3,8 @@ class Link < ApplicationRecord
   validates :url, url: true
 
   belongs_to :linkable, polymorphic: true
+
+  def is_gist?
+    url.include?('gist.github.com')
+  end
 end
