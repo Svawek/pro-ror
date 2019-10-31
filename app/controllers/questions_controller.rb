@@ -18,6 +18,7 @@ class QuestionsController < ApplicationController
   end
 
   def edit
+    @question.links.new
   end
 
   def create

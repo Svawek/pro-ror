@@ -59,6 +59,22 @@ feature 'Author can edit answer', %q{
         expect(page).to have_link 'feature_helpers.rb'
       end
     end
+
+    scenario 'and author edit answer with adding links', js: true do
+      sign_in user
+      visit question_path(question)
+
+      click_on 'Edit answer'
+      click_on 'add link'
+
+      fill_in 'Link name', with: link.name
+      fill_in 'Url', with: link.url
+
+      click_on 'Save'
+      
+
+      expect(page).to have_link(link.name, href: link.url)
+    end
   end
 
   scenario 'Unauthenticated user try to edit question' do

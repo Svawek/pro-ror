@@ -1,6 +1,6 @@
 class AnswersController < ApplicationController
   before_action :authenticate_user!
-  before_action :load_answer, only: %i[update destroy select_best]
+  before_action :load_answer, only: %i[update destroy select_best edit]
   before_action :load_answers, only: %i[update select_best]
 
   def create

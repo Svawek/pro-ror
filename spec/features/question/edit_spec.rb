@@ -9,6 +9,7 @@ feature 'Author can edit question', %q{
   given!(:user) { create(:user) }
   given(:user2) { create(:user) }
   given!(:question) { create(:question, user: user) }
+  given(:link) { create(:link, linkable: question)}
 
   describe 'Authenticated user' do
     scenario 'and author of question edit question', js: true do
@@ -62,6 +63,22 @@ feature 'Author can edit question', %q{
         expect(page).to have_link 'rails_helper.rb'
         expect(page).to have_link 'spec_helper.rb'
       end
+    end
+
+    scenario 'and author edit question with adding links', js: true do
+      sign_in user
+      visit questions_path
+
+      click_on 'Edit'
+      click_on 'add link'
+
+      fill_in 'Link name', with: link.name
+      fill_in 'Url', with: link.url
+
+      click_on 'Save'
+      visit question_path(question)
+
+      expect(page).to have_link(link.name, href: link.url)
     end
   end
 
