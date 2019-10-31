@@ -11,7 +11,7 @@ feature 'Author can delete his link', %q{
   given(:question) { create(:question, user: author) }
   given!(:link) { create(:link, linkable_type: Question, linkable_id: question.id) }
 
-  scenario 'Authenticated user delete his own link' do
+  scenario 'Authenticated user and author delete his own link', js: true do
     sign_in(author)
     visit question_path(question)
 
@@ -20,6 +20,19 @@ feature 'Author can delete his link', %q{
     click_on 'Delete link'
 
     expect(page).to have_no_text link.name
+  end
+
+  scenario 'Authenticated user delete link', js: true do
+    sign_in(user)
+    visit question_path(question)
+
+    expect(page).to have_no_text 'Delete link'
+  end
+
+  scenario 'Guest delete link', js: true do
+    visit question_path(question)
+
+    expect(page).to have_no_text 'Delete link'
   end
 
 end
