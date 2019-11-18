@@ -19,7 +19,7 @@ class AnswersController < ApplicationController
   end
 
   def select_best
-    @answer.the_best! if current_user.owner?(@answer)
+    @answer.the_best! if current_user.owner?(@answer.question)
   end
 
   private

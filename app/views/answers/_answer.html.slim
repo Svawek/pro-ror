@@ -18,10 +18,10 @@
             - if current_user&.owner?(link.linkable)
               p= link_to 'Delete link', link_path(link), method: :delete, remote: true
 
-    - if current_user&.owner?(answer)
+    - if current_user&.owner?(answer.question)
       - unless answer.best?
         p= link_to 'Best answer', select_best_answer_path(answer), method: :patch, remote: true
-
+    - if current_user&.owner?(answer)
       p= link_to 'Edit answer', '#', class: 'edit-answer-link', data: { answer_id: answer.id}
       = form_with model: [answer], class: 'hidden', html: { id: "edit-answer-#{answer.id}" } do |f|
         p

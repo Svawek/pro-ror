@@ -16,6 +16,7 @@ class Answer < ApplicationRecord
     transaction do
       current_best&.update!(best: false)
       update!(best: true)
+      user.awards << question.awards if question.awards.present?
     end
   end
 end
