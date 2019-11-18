@@ -6,6 +6,7 @@ class User < ApplicationRecord
   
   has_many :questions
   has_many :answers
+  has_many :awards
 
   def owner?(object)
     self.id == object.user_id

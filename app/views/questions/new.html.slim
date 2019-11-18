@@ -18,4 +18,15 @@
         = render 'link_fields', f: link
       .new-link
         = link_to_add_association 'add link', f, :links
+  
+  .add-award
+    p Award:
+    p
+      = f.fields_for :awards do |award|
+        p
+          = award.label :title, 'Award name'
+          = award.text_field :title
+        p
+          = award.label :link, 'Award image'
+          = award.text_field :link
   p= f.submit 'Ask'

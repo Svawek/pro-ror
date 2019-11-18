@@ -9,6 +9,7 @@ class QuestionsController < ApplicationController
   def new
     @question = Question.new
     @question.links.new
+    @question.awards.new
   end
 
   def show
@@ -48,7 +49,13 @@ class QuestionsController < ApplicationController
   private
 
   def question_params
-    params.require(:question).permit(:title, :body, files: [], links_attributes: [:name, :url])
+    params.require(:question).permit(
+                                      :title, 
+                                      :body, 
+                                      files: [], 
+                                      links_attributes: [:name, :url],
+                                      awards_attributes: [:title, :link]
+                                    )
   end
 
   def load_question
