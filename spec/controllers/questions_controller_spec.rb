@@ -42,7 +42,7 @@ RSpec.describe QuestionsController, type: :controller do
     end
 
     it 'assigns new Award for @question' do
-      expect(assigns(:question).awards.first).to be_a_new(Award)
+      expect(assigns(:question).award).to be_a_new(Award)
     end 
 
     it 'render new view' do

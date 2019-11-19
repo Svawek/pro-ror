@@ -10,6 +10,7 @@ feature 'Author can edit answer', %q{
   given(:user2) { create(:user) }
   given!(:question) { create(:question) }
   given!(:answer) { create(:answer, user: user, question: question) }
+  given(:link) { create(:link, linkable: answer)}
 
   describe 'Authenticated user' do
     scenario 'and author of answer edit answer', js: true do
@@ -65,14 +66,16 @@ feature 'Author can edit answer', %q{
       visit question_path(question)
 
       click_on 'Edit answer'
-      click_on 'add link'
-
-      fill_in 'Link name', with: link.name
-      fill_in 'Url', with: link.url
+      
+      within '.answers' do
+        click_on 'add link'
+      
+        fill_in 'Link name', with: link.name
+        fill_in 'Url', with: link.url
+      end
 
       click_on 'Save'
       
-
       expect(page).to have_link(link.name, href: link.url)
     end
   end

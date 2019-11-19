@@ -22,11 +22,11 @@
   .add-award
     p Award:
     p
-      = f.fields_for :awards do |award|
+      = f.fields_for :award do |a|
         p
-          = award.label :title, 'Award name'
-          = award.text_field :title
+          = a.label :title, 'Award name'
+          = a.text_field :title
         p
-          = award.label :link, 'Award image'
-          = award.text_field :link
+          = a.label :link, 'Award image'
+          = a.text_field :link
   p= f.submit 'Ask'

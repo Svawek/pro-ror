@@ -9,7 +9,7 @@ class QuestionsController < ApplicationController
   def new
     @question = Question.new
     @question.links.new
-    @question.awards.new
+    @question.build_award
   end
 
   def show
@@ -54,7 +54,7 @@ class QuestionsController < ApplicationController
                                       :body, 
                                       files: [], 
                                       links_attributes: [:name, :url],
-                                      awards_attributes: [:title, :link]
+                                      award_attributes: [:title, :link]
                                     )
   end
 
