@@ -4,7 +4,7 @@ class Link < ApplicationRecord
 
   belongs_to :linkable, polymorphic: true
 
-  def is_gist?
-    url.include?('gist.github.com')
+  def gist?
+    url =~ /^https:\/\/gist.github.com/
   end
 end

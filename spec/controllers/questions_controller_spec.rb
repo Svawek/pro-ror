@@ -59,6 +59,14 @@ RSpec.describe QuestionsController, type: :controller do
           expect { post :create, params: { question: attributes_for(:question) } }.to change(Question, :count).by(1)
         end
 
+        it 'saves a new link in the database' do
+          expect { post :create, params: { question: attributes_for(:question, "links_attributes"=>{"0"=>{"name"=>"vk", "url"=>"https://vk.com", "_destroy"=>"false"}}) } }.to change(Link, :count).by(1)
+        end
+
+        it 'saves a new award in the database' do
+          expect { post :create, params: { question: attributes_for(:question, "award_attributes"=>{"title"=>"1", "image"=> fixture_file_upload('award.webp', 'image/webp') }) } }.to change(Award, :count).by(1)
+        end
+
         it 'redirects to show view' do
           post :create, params: { question: attributes_for(:question) }
           expect(response).to redirect_to Question.order(created_at: :desc).first
@@ -68,6 +76,10 @@ RSpec.describe QuestionsController, type: :controller do
       context 'with invalid attributes' do
         it 'does not save the question' do
           expect { post :create, params: { question: attributes_for(:question, :invalid) } }.to_not change(Question, :count)
+        end
+
+        it 'does not save a new link in the database' do
+          expect { post :create, params: { question: attributes_for(:question, "links_attributes"=>{"0"=>{"name"=>"vk", "url"=>"vk.com", "_destroy"=>"false"}}) } }.to change(Link, :count).by(0)
         end
 
         it 're-renders new view' do

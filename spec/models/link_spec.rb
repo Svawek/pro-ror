@@ -39,15 +39,15 @@ RSpec.describe Link, type: :model do
     end
   end
 
-  context 'check gist' do
-    it 'not a gist url' do
-      link = Link.new(name: 'test', url: 'https://google.com')
-      expect(link.is_gist?).to be_falsey
+  describe 'check gist' do
+    context 'with not gist link' do
+      subject { Link.new(name: 'test', url: 'https://google.com') }
+      it { is_expected.not_to be_gist }
     end
 
-    it 'a gist url' do
-      link = Link.new(name: 'test', url: 'https://gist.github.com/Svawek/1fc1816264259cfa7c4e34ca19699aef')
-      expect(link.is_gist?).to be_truthy
+    context 'with gist link' do
+      subject { Link.new(name: 'test', url: 'https://gist.github.com/Svawek/1fc1816264259cfa7c4e34ca19699aef') }
+      it { is_expected.to be_gist}
     end
   end
 end

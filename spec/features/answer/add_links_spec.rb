@@ -15,9 +15,7 @@ feature 'User can add links to answer', %q{
     sign_in(user)
     visit question_path(question)
 
-    fill_in 'Body', with: 'test_answer test_answer'
-
-    
+    fill_in 'Body', with: 'test_answer test_answer' 
   end
 
   scenario 'User adds one link when answers the question', js:true do
@@ -26,7 +24,7 @@ feature 'User can add links to answer', %q{
 
     click_on 'Answer'
     visit question_path(question)
-    
+    within ('.answer.links')
     expect(page).to have_link 'Google', href: google_url
   end
 

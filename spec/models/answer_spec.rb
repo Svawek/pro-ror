@@ -3,16 +3,14 @@ require 'rails_helper'
 RSpec.describe Answer, type: :model do
   it { should belong_to :question }
   it { should belong_to :user }
-  it { should have_many(:links).dependent(:destroy) }
 
   it { should validate_presence_of :body }
-
-  it { should accept_nested_attributes_for :links }
 
   context 'Best answer' do
     let!(:user) { create(:user) }
     let!(:question) { create(:question, user: user) }
     let!(:answer) { create(:answer, question: question, user: user) }
+    let!(:award) { create(:award, question: question) }
 
     it 'question do not have  best answers' do
       answer.the_best!
@@ -30,7 +28,6 @@ RSpec.describe Answer, type: :model do
     end
 
     it 'question do not have best answers with award' do
-      award = create(:award, question: question)
       answer.the_best!
       award.reload
       expect(award.user).to eq answer.user
@@ -49,5 +46,5 @@ RSpec.describe Answer, type: :model do
   end
 
   it_behaves_like 'attached files', Answer
-
+  it_behaves_like 'check links in model'
 end

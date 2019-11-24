@@ -15,9 +15,9 @@
     p Links:
     p
       = f.fields_for :links do |link|
-        = render 'link_fields', f: link
+        = render 'links/link_fields', f: link
       .new-link
-        = link_to_add_association 'add link', f, :links
+        = link_to_add_association 'add link', f, :links, partial: 'links/link_fields'
   
   .add-award
     p Award:
@@ -27,6 +27,6 @@
           = a.label :title, 'Award name'
           = a.text_field :title
         p
-          = a.label :link, 'Award image'
-          = a.text_field :link
+          = a.label :image, 'Award image'
+          = a.file_field :image, direct_upload: true
   p= f.submit 'Ask'

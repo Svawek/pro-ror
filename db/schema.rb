@@ -49,7 +49,6 @@ ActiveRecord::Schema.define(version: 2019_11_17_101157) do
 
   create_table "awards", force: :cascade do |t|
     t.string "title"
-    t.string "link"
     t.bigint "question_id"
     t.bigint "user_id"
     t.datetime "created_at", null: false

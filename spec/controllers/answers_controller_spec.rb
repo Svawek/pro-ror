@@ -28,6 +28,11 @@ RSpec.describe AnswersController, type: :controller do
           created_answer = Answer.order(created_at: :desc).first
           expect(created_answer.question).to eq question
         end
+
+        it 'saves a new link in the database' do
+          expect { post :create, params: { question_id: question, answer: attributes_for(:answer, "links_attributes"=>{"0"=>{"name"=>"vk", "url"=>"https://vk.com", "_destroy"=>"false"}}) }, format: :js }.to change(Link, :count).by(1)
+        end
+
   
         it 'render template :create' do
           post :create, params: { question_id: question, answer: attributes_for(:answer) }, format: :js
@@ -38,6 +43,10 @@ RSpec.describe AnswersController, type: :controller do
       context 'with invalid attributes' do
         it 'does not save the answer' do
           expect { post :create, params: { question_id: question, answer: attributes_for(:answer, :invalid) }, format: :js }.to_not change(Answer, :count)
+        end
+
+        it 'does not save a new link in the database' do
+          expect { post :create, params: { question_id: question, answer: attributes_for(:answer, "links_attributes"=>{"0"=>{"name"=>"vk", "url"=>"vk.com", "_destroy"=>"false"}}) }, format: :js }.to change(Link, :count).by(0)
         end
   
         it 'render template :create' do
