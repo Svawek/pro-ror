@@ -1,5 +1,5 @@
 class Question < ApplicationRecord
-  include LinkDependeces
+  include LinkDependences
 
   has_many :answers, dependent: :destroy
   has_one :award, dependent: :destroy

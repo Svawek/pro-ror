@@ -1,4 +1,4 @@
-module LinkDependeces
+module LinkDependences
   extend ActiveSupport::Concern
 
   included do

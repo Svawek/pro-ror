@@ -1,5 +1,5 @@
 class Answer < ApplicationRecord
-  include LinkDependeces
+  include LinkDependences
 
   belongs_to :question
   belongs_to :user
