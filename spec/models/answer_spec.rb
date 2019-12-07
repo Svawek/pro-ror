@@ -10,6 +10,7 @@ RSpec.describe Answer, type: :model do
     let!(:user) { create(:user) }
     let!(:question) { create(:question, user: user) }
     let!(:answer) { create(:answer, question: question, user: user) }
+    let!(:award) { create(:award, question: question) }
 
     it 'question do not have  best answers' do
       answer.the_best!
@@ -25,6 +26,12 @@ RSpec.describe Answer, type: :model do
       expect(answer2).not_to be_best
       expect(answer).to be_best
     end
+
+    it 'question do not have best answers with award' do
+      answer.the_best!
+      award.reload
+      expect(award.user).to eq answer.user
+    end
   end
 
   context 'Default scope' do
@@ -39,4 +46,5 @@ RSpec.describe Answer, type: :model do
   end
 
   it_behaves_like 'attached files', Answer
+  it_behaves_like 'check links in model'
 end

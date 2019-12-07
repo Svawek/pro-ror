@@ -13,19 +13,39 @@ RSpec.describe QuestionsController, type: :controller do
   end
 
   describe 'GET #show' do
-    it 'render show view' do
-      get :show, params: { id: question }
+    before { get :show, params: { id: question } }
 
+    it 'render show view' do
       expect(response).to render_template :show
     end
+
+    it 'assigns new answer' do
+      expect(assigns(:answer)).to be_a_new(Answer)
+    end
+
+    it 'assigns new link for answer' do
+      expect(assigns(:answer).links.first).to be_a_new(Link)
+    end    
   end
 
   describe 'GET #new' do
     before { login(user) }
 
-    it 'render new view' do
-      get :new
+    before { get :new }
 
+    it 'assigns new Question to @question' do
+      expect(assigns(:question)).to be_a_new(Question)
+    end
+
+    it 'assigns new Link to @question' do
+      expect(assigns(:question).links.first).to be_a_new(Link)
+    end
+
+    it 'assigns new Award for @question' do
+      expect(assigns(:question).award).to be_a_new(Award)
+    end 
+
+    it 'render new view' do
       expect(response).to render_template :new
     end
   end
@@ -39,6 +59,14 @@ RSpec.describe QuestionsController, type: :controller do
           expect { post :create, params: { question: attributes_for(:question) } }.to change(Question, :count).by(1)
         end
 
+        it 'saves a new link in the database' do
+          expect { post :create, params: { question: attributes_for(:question, "links_attributes"=>{"0"=>{"name"=>"vk", "url"=>"https://vk.com", "_destroy"=>"false"}}) } }.to change(Link, :count).by(1)
+        end
+
+        it 'saves a new award in the database' do
+          expect { post :create, params: { question: attributes_for(:question, "award_attributes"=>{"title"=>"1", "image"=> fixture_file_upload('award.webp', 'image/webp') }) } }.to change(Award, :count).by(1)
+        end
+
         it 'redirects to show view' do
           post :create, params: { question: attributes_for(:question) }
           expect(response).to redirect_to Question.order(created_at: :desc).first
@@ -48,6 +76,10 @@ RSpec.describe QuestionsController, type: :controller do
       context 'with invalid attributes' do
         it 'does not save the question' do
           expect { post :create, params: { question: attributes_for(:question, :invalid) } }.to_not change(Question, :count)
+        end
+
+        it 'does not save a new link in the database' do
+          expect { post :create, params: { question: attributes_for(:question, "links_attributes"=>{"0"=>{"name"=>"vk", "url"=>"vk.com", "_destroy"=>"false"}}) } }.to change(Link, :count).by(0)
         end
 
         it 're-renders new view' do

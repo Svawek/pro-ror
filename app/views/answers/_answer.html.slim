@@ -6,9 +6,15 @@
     - if answer.files.attached?
       = render partial: 'partials/file', collection: answer.files, as: :file
 
-    - if current_user&.owner?(answer)
+    .links
+      p Links:
+      ul
+        = render partial: 'partials/links', locals: {links: answer.links}
+
+    - if current_user&.owner?(answer.question)
       - unless answer.best?
         p= link_to 'Best answer', select_best_answer_path(answer), method: :patch, remote: true
+    - if current_user&.owner?(answer)
       p= link_to 'Edit answer', '#', class: 'edit-answer-link', data: { answer_id: answer.id}
       = form_with model: [answer], class: 'hidden', html: { id: "edit-answer-#{answer.id}" } do |f|
         p
@@ -17,6 +23,13 @@
         p
           = f.label :files
           = f.file_field :files, multiple: true, direct_upload: true
+        .add-links
+          p Links:
+          p
+            = f.fields_for :links do |link|
+              = render 'links/link_fields', f: link
+            .new-link
+              = link_to_add_association 'add link', f, :links, partial: 'links/link_fields'
         p= f.submit 'Save'
 
       p= link_to 'Delete Answer', answer_path(answer), method: :delete, remote: true

@@ -1,6 +1,6 @@
 class AnswersController < ApplicationController
   before_action :authenticate_user!
-  before_action :load_answer, only: %i[update destroy select_best]
+  before_action :load_answer, only: %i[update destroy select_best edit]
   before_action :load_answers, only: %i[update select_best]
 
   def create
@@ -19,13 +19,14 @@ class AnswersController < ApplicationController
   end
 
   def select_best
-    @answer.the_best! if current_user.owner?(@answer)
+    @answer.the_best! if current_user.owner?(@answer.question)
   end
 
   private
 
   def answer_params
-    params.require(:answer).permit(:body, files: [])
+    params.require(:answer).permit(:body, files: [], 
+                                    links_attributes: [:name, :url])
   end
 
   def load_answer

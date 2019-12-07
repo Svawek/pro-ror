@@ -1,4 +1,6 @@
 class Answer < ApplicationRecord
+  include LinkDependencies
+
   belongs_to :question
   belongs_to :user
 
@@ -13,6 +15,7 @@ class Answer < ApplicationRecord
     transaction do
       current_best&.update!(best: false)
       update!(best: true)
+      user.awards << question.award if question.award.present?
     end
   end
 end

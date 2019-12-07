@@ -1,0 +1,8 @@
+My awards:
+
+ol
+  - @awards.each do |award|
+    li 
+      p Question: #{award.question.title}
+      p Award: #{award.title}
+      p= image_tag(award.image)
