@@ -1,5 +1,6 @@
 class Answer < ApplicationRecord
   include LinkDependencies
+  include Votable
 
   belongs_to :question
   belongs_to :user

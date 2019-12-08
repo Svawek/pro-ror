@@ -1,6 +1,6 @@
 class AnswersController < ApplicationController
   before_action :authenticate_user!
-  before_action :load_answer, only: %i[update destroy select_best edit]
+  before_action :load_answer, only: %i[update destroy select_best edit vote]
   before_action :load_answers, only: %i[update select_best]
 
   def create
@@ -20,6 +20,14 @@ class AnswersController < ApplicationController
 
   def select_best
     @answer.the_best! if current_user.owner?(@answer.question)
+  end
+
+  def vote
+    unless @answer.vote?(current_user) || current_user.owner?(@answer)
+      answer_vote = @answer.votes.new(choice: params[:choice], user: current_user)
+      answer_vote.save
+      redirect_to @answer.question, notice: 'Your vote counted'
+    end
   end
 
   private

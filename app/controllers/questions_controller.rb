@@ -1,6 +1,6 @@
 class QuestionsController < ApplicationController
   before_action :authenticate_user!, except: %i[index show]
-  before_action :load_question, only: %i[show edit update destroy]
+  before_action :load_question, only: %i[show edit update destroy vote]
 
   def index
     @questions = Question.all
@@ -46,6 +46,14 @@ class QuestionsController < ApplicationController
     redirect_to questions_path, notice: 'Question delete'
   end
 
+  def vote
+    unless @question.vote?(current_user) || current_user.owner?(@question)
+      question_vote = @question.votes.new(choice: params[:choice], user: current_user)
+      question_vote.save
+      redirect_to @question, notice: 'Your vote counted'
+    end
+  end
+
   private
 
   def question_params
@@ -60,5 +68,9 @@ class QuestionsController < ApplicationController
 
   def load_question
     @question = Question.with_attached_files.find(params[:id])
+  end
+
+  def user_vote?
+    @question.votes.where(user_id: current_user.id).present?
   end
 end

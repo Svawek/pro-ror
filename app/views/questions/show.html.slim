@@ -9,6 +9,14 @@ p= @question.body
   p Links:
   ul
     = render partial: 'partials/links', locals: {links: @question.links}
+  
+.question-vote
+  - unless !current_user || current_user.owner?(@question)
+    - if @question.vote?(current_user)
+      p= link_to 'Cancel your vote', vote_path(@question.user_vote_obj(current_user)), method: :delete
+    - else
+      p= link_to 'Like question', vote_question_path(choice: true), method: :post
+      p= link_to 'Dislike question', vote_question_path(choice: false), method: :post
 
 .answers
   p.answer-title Answers:
@@ -33,4 +41,4 @@ p= @question.body
         .new-link
           = link_to_add_association 'add link', f, :links, partial: 'links/link_fields'
     p= f.submit 'Answer'
-    
+      

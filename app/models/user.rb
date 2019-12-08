@@ -7,6 +7,7 @@ class User < ApplicationRecord
   has_many :questions
   has_many :answers
   has_many :awards
+  has_many :votes, dependent: :destroy, as: :votable
 
   def owner?(object)
     self.id == object.user_id

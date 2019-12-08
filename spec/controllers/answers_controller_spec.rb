@@ -192,4 +192,36 @@ RSpec.describe AnswersController, type: :controller do
       end
     end
   end
+
+  describe "POST #vote" do
+    let!(:answer) { create(:answer, question: question, user: user) }
+    
+    context "Author of answer" do
+      before { login(user) }
+      
+      it 'does not save the vote' do
+        expect { post :vote, params: {id: answer, choice: true} }.to_not change(Vote, :count)
+      end
+    end
+
+    context "Authenticated user" do
+      let(:user2) { create(:user) }
+      before { login(user2) }
+
+      it 'save the vote' do
+        expect { post :vote, params: {id: answer, choice: true} }.to change(Vote, :count)
+      end
+
+      it 'redirects to show question view' do
+        post :vote, params: {id: answer, choice: true}
+        expect(response).to redirect_to question
+      end
+    end
+
+    context "Guest" do
+      it 'does not save the vote' do
+        expect { post :vote, params: {id: answer, choice: true} }.to_not change(Vote, :count)
+      end
+    end
+  end
 end
