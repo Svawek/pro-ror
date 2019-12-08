@@ -11,6 +11,7 @@ p= @question.body
     = render partial: 'partials/links', locals: {links: @question.links}
   
 .question-vote
+  p Vote result: #{@question.count_votes}
   - unless !current_user || current_user.owner?(@question)
     - if @question.vote?(current_user)
       p= link_to 'Cancel your vote', vote_path(@question.user_vote_obj(current_user)), method: :delete

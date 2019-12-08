@@ -19,6 +19,7 @@ feature 'Authenticated user can vote for the question', %q{
         click_on "Like question"
         expect(page).to_not have_content "Like question"
         expect(page).to_not have_content "Dislike question"
+        expect(page).to have_content "Vote result: 1"
         expect(page).to have_content "Cancel your vote"
       end
       expect(page).to have_text "Your vote counted"

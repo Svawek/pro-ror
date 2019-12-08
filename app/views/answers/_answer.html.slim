@@ -16,6 +16,7 @@
         p= link_to 'Best answer', select_best_answer_path(answer), method: :patch, remote: true
 
     .answer-vote
+      p Vote result: #{answer.count_votes}
       - unless !current_user || current_user.owner?(answer)
         - if answer.vote?(current_user)
           p= link_to 'Cancel your vote', vote_path(answer.user_vote_obj(current_user)), method: :delete
